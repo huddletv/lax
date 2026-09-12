@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIDLAX — Engineered for Attack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --off-white: #f2f1ed;
+    --grey: #6e6e6e;
+    --line: #2a2a2a;
+    --line-light: #d8d6cf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  .display {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.92;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 32px;
+    mix-blend-mode: difference;
+  }
+  .nav-mark {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+  .nav-links a { opacity: 0.75; transition: opacity 0.2s ease; }
+  .nav-links a:hover { opacity: 1; }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 120px;
+    overflow: hidden;
+  }
+
+  .taper-line {
+    position: absolute;
+    top: 0;
+    right: 8%;
+    height: 100%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--line) 15%, var(--line) 85%, transparent);
+  }
+
+  .taper-shape {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 46vw;
+    height: 100%;
+    background: linear-gradient(115deg, transparent 0%, transparent 42%, rgba(255,255,255,0.035) 42.3%, rgba(255,255,255,0.035) 100%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 90px;
+  }
+
+  .hero-eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--grey);
+    margin-bottom: 22px;
+    max-width: 480px;
+  }
+
+  .hero-eyebrow .mono {
+    color: var(--off-white);
+  }
+
+  h1.hero-title {
+    font-size: clamp(58px, 11vw, 156px);
+    color: var(--white);
+  }
+
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 460px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--grey);
+  }
+
+  .hero-cta-row {
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .btn-primary {
+    background: var(--white);
+    color: var(--black);
+    padding: 16px 30px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: inline-block;
+    transition: background 0.2s ease;
+  }
+  .btn-primary:hover { background: var(--off-white); }
+
+  .btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--off-white);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 3px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 36px;
+    left: 32px;
+    font-size: 12px;
+    color: var(--grey);
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .scroll-cue::after {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--line);
+  }
+
+  /* ---------- MARQUEE STRIP ---------- */
+  .strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .strip-track {
+    display: inline-flex;
+    gap: 48px;
+    animation: scroll-left 28s linear infinite;
+  }
+  .strip span {
+    font-family: 'Anton', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    color: var(--line-light);
+    opacity: 0.35;
+  }
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section { position: relative; }
+  .section-pad { padding: 130px 0; }
+  .section-pad-sm { padding: 90px 0; }
+
+  .row-head {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px;
+    margin-bottom: 70px;
+  }
+  @media (max-width: 860px) {
+    .row-head { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  .index-mark {
+    font-size: 13px;
+    color: var(--grey);
+    letter-spacing: 0.04em;
+  }
+
+  h2.section-title {
+    font-size: clamp(34px, 5vw, 58px);
+    color: var(--white);
+  }
+
+  .section-copy {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--grey);
+    max-width: 480px;
+    align-self: end;
+  }
+
+  /* ---------- MATERIAL / SPEC SECTION ---------- */
+  .spec-section {
+    background: var(--off-white);
+    color: var(--black);
+  }
+  .spec-section .grey { color: #6a6a64; }
+  .spec-section .index-mark { color: #6a6a64; }
+  .spec-section .row-head h2 { color: var(--black); }
+
+  .taper-diagram {
+    position: relative;
+    height: 220px;
+    margin: 60px 0 80px;
+    display: flex;
+    align-items: center;
+  }
+  .taper-shaft {
+    position: relative;
+    width: 100%;
+    height: 46px;
+    background: var(--black);
+    clip-path: polygon(0% 38%, 100% 8%, 100% 92%, 0% 62%);
+  }
+  .taper-tick {
+    position: absolute;
+    top: -28px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: #6a6a64;
+    border-left: 1px solid #b8b6ac;
+    padding-left: 6px;
+  }
+  .taper-tick.grip { left: 4%; }
+  .taper-tick.mid { left: 46%; }
+  .taper-tick.throat { left: 88%; }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #d3d1c8;
+    border: 1px solid #d3d1c8;
+  }
+  @media (max-width: 760px) {
+    .spec-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .spec-cell {
+    background: var(--off-white);
+    padding: 32px 26px;
+  }
+  .spec-cell .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 30px;
+    color: var(--black);
+  }
+  .spec-cell .label {
+    margin-top: 10px;
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    color: #6a6a64;
+    line-height: 1.5;
+  }
+
+  /* ---------- PILLARS ---------- */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  @media (max-width: 860px) {
+    .pillars { grid-template-columns: 1fr; }
+  }
+  .pillar {
+    border-top: 1px solid var(--line);
+    padding: 44px 40px 44px 0;
+  }
+  .pillar:not(:last-child) {
+    border-right: 1px solid var(--line);
+  }
+  @media (max-width: 860px) {
+    .pillar:not(:last-child) { border-right: none; }
+  }
+  .pillar-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--grey);
+  }
+  .pillar h3 {
+    font-family: 'Anton', sans-serif;
+    text-transform: uppercase;
+    font-size: 26px;
+    margin: 22px 0 16px;
+    color: var(--white);
+  }
+  .pillar p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--grey);
+    max-width: 300px;
+  }
+
+  /* ---------- LINE LENGTH / POSITION SECTION ---------- */
+  .position-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+  }
+  @media (max-width: 860px) {
+    .position-section { grid-template-columns: 1fr; }
+  }
+  .position-visual {
+    position: relative;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .position-visual svg { width: 100%; height: 100%; }
+
+  .position-copy .tag {
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    color: var(--grey);
+    border: 1px solid var(--line);
+    display: inline-block;
+    padding: 6px 14px;
+    margin-bottom: 26px;
+  }
+  .position-copy h2 { font-size: clamp(32px, 4.5vw, 48px); color: var(--white); margin-bottom: 22px; }
+  .position-copy p { font-size: 15.5px; line-height: 1.65; color: var(--grey); max-width: 420px; margin-bottom: 18px; }
+
+  /* ---------- CTA ---------- */
+  .cta-section {
+    padding: 150px 0 130px;
+    text-align: left;
+    border-top: 1px solid var(--line);
+  }
+  .cta-section h2 {
+    font-size: clamp(44px, 8vw, 108px);
+    color: var(--white);
+    max-width: 900px;
+  }
+  .cta-row {
+    margin-top: 46px;
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0;
+  }
+  .foot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .foot-mark {
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    color: var(--white);
+  }
+  .foot-links {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    color: var(--grey);
+  }
+  .foot-links a:hover { color: var(--white); }
+  .foot-copy {
+    font-size: 12.5px;
+    color: #4a4a4a;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark">CIDLAX</div>
+  <div class="nav-links">
+    <a href="#material">Material</a>
+    <a href="#build">Build</a>
+    <a href="#position">Attack / Mid</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="taper-line"></div>
+  <div class="taper-shape"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow">
+      <span class="mono">7075-T6</span> aerospace aluminum — built for attack &amp; midfield
+    </div>
+    <h1 class="hero-title display">CUT<br>THE<br>WEIGHT</h1>
+    <p class="hero-sub">CIDLAX shafts are engineered from aircraft-grade 7075 aluminum — tapered where you need control, reinforced where the game breaks equipment. Built lighter, without giving up an inch of strength.</p>
+    <div class="hero-cta-row">
+      <a href="#contact" class="btn-primary">Get Early Access</a>
+      <a href="#material" class="btn-secondary">See the material →</a>
+    </div>
+  </div>
+  <div class="scroll-cue">SCROLL</div>
+</section>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>7075-T6 ALLOY</span><span>30" ATTACK / MID</span><span>TAPERED WALL</span><span>SANDBLAST ANODIZED</span><span>ENGINEERED IN SMALL BATCHES</span>
+    <span>7075-T6 ALLOY</span><span>30" ATTACK / MID</span><span>TAPERED WALL</span><span>SANDBLAST ANODIZED</span><span>ENGINEERED IN SMALL BATCHES</span>
+  </div>
+</div>
+
+<!-- MATERIAL -->
+<section class="spec-section" id="material">
+  <div class="wrap section-pad">
+    <div class="row-head">
+      <div class="index-mark">01 — MATERIAL</div>
+      <div>
+        <h2 class="section-title display">Aerospace alloy.<br>Field-tested geometry.</h2>
+      </div>
+    </div>
+
+    <div class="taper-diagram">
+      <span class="taper-tick grip">GRIP END — reinforced wall</span>
+      <span class="taper-tick mid">MIDSECTION — tapered transition</span>
+      <span class="taper-tick throat">THROAT — thin-wall, light</span>
+      <div class="taper-shaft"></div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-cell">
+        <div class="num">7075-T6</div>
+        <div class="label">Alloy &amp; temper — higher strength-to-weight than standard 6061 shafts</div>
+      </div>
+      <div class="spec-cell">
+        <div class="num">30"</div>
+        <div class="label">Standard length for attack &amp; midfield hand speed</div>
+      </div>
+      <div class="spec-cell">
+        <div class="num">±0.08mm</div>
+        <div class="label">Wall thickness tolerance — consistent flex, no dead spots</div>
+      </div>
+      <div class="spec-cell">
+        <div class="num">100%</div>
+        <div class="label">Mill-certified material — no unverified alloy claims</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD PILLARS -->
+<section id="build">
+  <div class="wrap section-pad">
+    <div class="row-head">
+      <div class="index-mark">02 — BUILD</div>
+      <div>
+        <h2 class="section-title display">Light doesn't mean fragile</h2>
+        <p class="section-copy">Weight comes off where the shaft can afford to lose it. Strength stays where the game puts stress on it.</p>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-index mono">A</div>
+        <h3>Tapered Wall</h3>
+        <p>Thicker at the grip and throat transitions, thinner through the midsection — weight comes off exactly where it won't cost you stiffness.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-index mono">B</div>
+        <h3>Reinforced Ends</h3>
+        <p>Butt-end and head connection points are built up, not shaved down — the two spots that take the hardest hits on the field.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-index mono">C</div>
+        <h3>Anodized Finish</h3>
+        <p>A hard oxide surface layer for scratch and corrosion resistance — finished, not just painted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSITION -->
+<section id="position">
+  <div class="wrap section-pad">
+    <div class="position-section">
+      <div class="position-copy">
+        <div class="tag mono">BUILT FOR ONE JOB</div>
+        <h2 class="display">Attack &amp; midfield. Nothing else.</h2>
+        <p>We're not building one shaft for every position. This is a dedicated attack/midfield build — smaller diameter, quicker release, 30" length — because a shaft built for everyone ends up built for no one.</p>
+        <p>Defense-length builds come later, once this one earns it.</p>
+      </div>
+      <div class="position-visual">
+        <svg viewBox="0 0 400 360" fill="none">
+          <line x1="60" y1="60" x2="60" y2="300" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="200" y1="60" x2="200" y2="300" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4 6"/>
+          <line x1="340" y1="60" x2="340" y2="300" stroke="#2a2a2a" stroke-width="1"/>
+          <rect x="52" y="70" width="16" height="220" fill="#f2f1ed"/>
+          <text x="60" y="320" fill="#6e6e6e" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">30"</text>
+          <text x="60" y="46" fill="#f2f1ed" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">ATK/MID</text>
+          <rect x="192" y="55" width="16" height="245" fill="#3a3a3a"/>
+          <text x="200" y="320" fill="#4a4a4a" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">32"</text>
+          <text x="200" y="42" fill="#4a4a4a" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">TWEENER</text>
+          <rect x="332" y="40" width="16" height="260" fill="#2a2a2a"/>
+          <text x="340" y="320" fill="#3a3a3a" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">40"+</text>
+          <text x="340" y="30" fill="#3a3a3a" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">DEFENSE</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="wrap">
+    <div class="index-mark">03 — CONTACT</div>
+    <h2 class="display" style="margin-top: 24px;">READY WHEN<br>YOU ARE</h2>
+    <div class="cta-row">
+      <a href="mailto:hello@cidlax.com" class="btn-primary">hello@cidlax.com</a>
+      <a href="#" class="btn-secondary">Follow the build →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-mark">CIDLAX</div>
+    <div class="foot-links">
+      <a href="#material">Material</a>
+      <a href="#build">Build</a>
+      <a href="#position">Position</a>
+    </div>
+    <div class="foot-copy">© 2026 CIDLAX. Engineered in small batches.</div>
+  </div>
+</footer>
+
+</body>
+</html>
